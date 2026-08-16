@@ -1,0 +1,24 @@
+<%# 1. Remove the task from where it currently is %>
+<%= turbo_stream.remove dom_id(@task) %>
+
+<%# 2. Put it back in the right place %>
+<% if @task.completed %>
+  <%# If it's done, send it to the bottom of the list %>
+  <%= turbo_stream.append "tasks" do %>
+    <%= turbo_frame_tag @task do %>
+      <%= render 'task', task: @task %>
+    <% end %>
+  <% end %>
+<% else %>
+  <%# If they un-check it, send it back up to the top %>
+  <%= turbo_stream.prepend "tasks" do %>
+    <%= turbo_frame_tag @task do %>
+      <%= render 'task', task: @task %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%# 3. Update the Top Banner to reflect the new counts %>
+<%= turbo_stream.replace "todo-banner" do %>
+  <%= render 'banner', tasks: @tasks %>
+<% end %>

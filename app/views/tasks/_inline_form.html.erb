@@ -1,0 +1,18 @@
+<%= form_with(model: task, id: "new_task_form", class: "w-full relative") do |form| %>
+  <div class="flex gap-3 w-full">
+    <%= form.text_field :title, 
+          placeholder: "What needs to be done?", 
+          class: "flex-1 px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg", 
+          required: true,
+          oninput: "document.getElementById('task-error')?.remove()" %>
+          
+    <%= form.submit "Add Task", class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow cursor-pointer transition whitespace-nowrap" %>
+  </div>
+
+  <% if task.errors.any? %>
+    <%# -bottom-6 pushes the text outside the box so the box never changes size %>
+    <p id="task-error" class="absolute -bottom-6 left-2 text-red-500 text-sm font-semibold">
+      <%= task.errors.full_messages.first %>
+    </p>
+  <% end %>
+<% end %>

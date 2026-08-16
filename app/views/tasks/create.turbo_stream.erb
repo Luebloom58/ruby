@@ -1,0 +1,27 @@
+<%# 1. Append the new task to the bottom of the list %>
+<%= turbo_stream.append "tasks" do %>
+  <%= turbo_frame_tag @task do %>
+    <%= render "task", task: @task %>
+  <% end %>
+<% end %>
+
+<%# 2. Update the banner with the new counts %>
+<%= turbo_stream.replace "todo-banner" do %>
+  <%= render "banner", tasks: @tasks %>
+<% end %>
+
+<%# 3. Clear the text input so the user can type another task instantly %>
+<%= turbo_stream.replace "new_task_form" do %>
+  <%= render "inline_form", task: Task.new %>
+<% end %>
+
+<%# Toast Notification for Create %>
+<% toast_id = "toast_#{Time.now.to_i}" %>
+<%= turbo_stream.append "toasts" do %>
+  <div id="<%= toast_id %>" class="bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg font-medium transition-all transform duration-300">
+    ✅ Task created successfully!
+  </div>
+  <script>
+    setTimeout(() => { document.getElementById('<%= toast_id %>').remove(); }, 3000);
+  </script>
+<% end %>

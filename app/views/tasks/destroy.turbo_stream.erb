@@ -1,0 +1,18 @@
+<%# 1. Instantly remove the task card from the screen %>
+<%= turbo_stream.remove @task %>
+
+<%# 2. Update the Top Banner to reflect the new counts %>
+<%= turbo_stream.replace "todo-banner" do %>
+  <%= render 'banner', tasks: @tasks %>
+<% end %>
+
+<%# Toast Notification for Delete %>
+<% toast_id = "toast_#{Time.now.to_i}" %>
+<%= turbo_stream.append "toasts" do %>
+  <div id="<%= toast_id %>" class="bg-red-500 border border-gray-700 text-white px-6 py-3 rounded-lg shadow-lg font-medium transition-all transform duration-300">
+    🗑️ Task deleted.
+  </div>
+  <script>
+    setTimeout(() => { document.getElementById('<%= toast_id %>').remove(); }, 3000);
+  </script>
+<% end %>
